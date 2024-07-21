@@ -1,0 +1,33 @@
+/* components/ui/BottomNav.module.css */
+
+.bottomNav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: black;
+    padding: 0px 0px;
+    height: 80px;
+    border-radius: 50px 50px 0px 0px;
+  }
+  
+  .navItem {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .icon {
+    fill: white;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .navItem.active .icon {
+    fill: purple;
+  }
+  .custom-width {
+    width: 60px; /* Ajusta este valor según tus necesidades */
+  }
+  

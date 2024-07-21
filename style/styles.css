@@ -1,0 +1,44 @@
+/* styles.css o en el archivo de estilos que uses */
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .carousel-content {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .carousel-item {
+    flex: 0 0 auto; /* Prevent shrinking */
+    width: 300px; /* Width of each item */
+    margin: 0 10px;
+  }
+  
+  .carousel-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .carousel-button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1;
+  }
+  
+  .carousel-button.left {
+    position: absolute;
+    left: 0;
+  }
+  
+  .carousel-button.right {
+    position: absolute;
+    right: 0;
+  }
+  

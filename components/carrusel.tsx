@@ -1,99 +1,48 @@
-"use client";
+// components/carrusel.tsx
+'use client';
 
-import React, { useState, useEffect } from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+import React from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation'; // Usa useRouter de next/navigation
+import getImagePath from '@/lib/getImagePath';
+import Link from 'next/link';
 
-const API_KEY = "5485316c"; // Reemplaza con tu API Key
-
-interface Movie {
-  Title: string;
-  Year: string;
-  Genre: string;
-  Plot: string;
-  Director: string;
-  Actors: string;
-  imdbRating: string;
-  Poster: string;
+interface HorizontalCarouselProps {
+  items: { id: number; backdrop_path: string }[]; // Espera un array de objetos con id y backdrop_path
 }
 
-const MOVIE_IDS = [
-  "tt3896198",
-  "tt0110912",
-  "tt0133093",
-  "tt0468569",
-  "tt0120737",
-  "t2000",
-];
+const HorizontalCarousel: React.FC<HorizontalCarouselProps> = ({ items }) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+  const router = useRouter();
 
-export function CarouselSize() {
-  const [movies, setMovies] = useState<Movie[]>([]);
-
-  useEffect(() => {
-    async function fetchMovies() {
-      const results = await Promise.all(
-        MOVIE_IDS.map(async (id) => {
-          const response = await fetch(
-            //`http://www.omdbapi.com/?i=${id}&apikey=${API_KEY}`
-            `http://www.omdbapi.com/?apikey=${API_KEY}`
-          );
-          const data: Movie = await response.json();
-          return data;
-        })
-      );
-      setMovies(results);
-    }
-
-    fetchMovies();
-  }, []);
-
+  const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
+  const scrollNext = () => emblaApi && emblaApi.scrollNext();
   return (
-    <Carousel
-      opts={{
-        align: "start",
-      }}
-      className="w-full max-w-sm"
-    >
-      <CarouselContent>
-        {movies.map((movie, index) => (
-          <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-            <div className="p-1">
-              <Card className="w-320">
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <div className="w-full">
-                    <img
-                      src={movie.Poster}
-                      alt={movie.Title}
-                      className="mx-auto mb-4"
-                    />
-                    <h2 className="text-xl font-semibold">{movie.Title}</h2>
-                    <p>{movie.Year}</p>
-                    
-                    
-                    <p>
-                      <strong>Director:</strong> {movie.Director}
-                    </p>
-                    <p>
-                      <strong>Actors:</strong> {movie.Actors}
-                    </p>
-                    <p>
-                      <strong>IMDb Rating:</strong> {movie.imdbRating}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+    <div className="relative">
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex">
+          {items.map((item) => (
+            <Link href={`/movie/${item.id}`} key={item.id}>
+            <div
+              key={item.id}
+              className="flex-shrink-0 w-full mx-4"
+              style={{ cursor: 'pointer' }}
+            >
+              <div className="m-4 border border-gray-200 rounded-lg">
+                <img
+                  src={getImagePath(item.backdrop_path)}
+                  alt={`Item ${item.id}`}
+                  className="w-full h-auto rounded-md"
+                />
+              </div>
+              </div>
+              </Link>
+          ))}
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default HorizontalCarousel;
