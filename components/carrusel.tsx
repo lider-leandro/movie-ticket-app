@@ -1,48 +1,47 @@
-// components/carrusel.tsx
-'use client';
-
-import React from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { useRouter } from 'next/navigation'; // Usa useRouter de next/navigation
-import getImagePath from '@/lib/getImagePath';
-import Link from 'next/link';
+"use client";
+import * as React from "react";
+import getImagePath from "@/lib/getImagePath";
+import Image from "next/image";
+import Link from "next/link";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 interface HorizontalCarouselProps {
   items: { id: number; backdrop_path: string }[]; // Espera un array de objetos con id y backdrop_path
 }
-
-const HorizontalCarousel: React.FC<HorizontalCarouselProps> = ({ items }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
-  const router = useRouter();
-
-  const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
-  const scrollNext = () => emblaApi && emblaApi.scrollNext();
+// Modifica la función para que acepte props
+const CarouselDemo: React.FC<HorizontalCarouselProps> = ({ items }) => {
   return (
-    <div className="relative">
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex">
-          {items.map((item) => (
-            <Link href={`/movie/${item.id}`} key={item.id}>
-            <div
-              key={item.id}
-              className="flex-shrink-0 w-full mx-4"
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="m-4 border border-gray-200 rounded-lg">
-                <img
-                  src={getImagePath(item.backdrop_path)}
-                  alt={`Item ${item.id}`}
-                  className="w-full h-auto rounded-md"
-                />
-              </div>
-              </div>
+    <Carousel className="w-full max-w-xs relative">
+      <CarouselContent>
+        {items.map((item, index) => (
+          <CarouselItem key={index}>
+            <div className="ml-9">
+              <Link href={`/movie/${item.id}`}>
+                <Card className="h-50 w-70">
+                  <CardContent className="p-0 flex aspect-square items-center justify-center h-full w-full">
+                    <Image 
+                      src={getImagePath(item.backdrop_path)} // Usa `item` en lugar de `items`
+                      alt={`Image ${index}`}
+                      className="h-full w-full p-0"
+                      width={600}
+                      height={400}
+                    />
+                  </CardContent>
+                </Card>
               </Link>
-          ))}
-        </div>
-      </div>
-    </div>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+    </Carousel>
   );
 };
-
-export default HorizontalCarousel;
+export default CarouselDemo;

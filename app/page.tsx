@@ -1,5 +1,5 @@
 import React from 'react';
-import HorizontalCarousel from '../components/carrusel'; // Asegúrate de la ruta
+import  CarouselDemo  from '../components/carrusel'; // Asegúrate de la ruta
 import BottomNav from '@/components/bottomnav';
 import { ScrollAreaHorizontalDemo } from '@/components/scrollmovie'; // Asegúrate de la ruta
 import { getUpcomingMovies } from '@/lib/getmovies';
@@ -32,7 +32,7 @@ export default async function Home() {
     <main className="w-full min-h-screen">
       <ModeToggle />
         <p>Anime Movies</p>
-      <HorizontalCarousel items={Movies} />
+      <CarouselDemo items={Movies} />
       <p>Comedy Movies</p>
       <ScrollAreaHorizontalDemo items={comedyImagePaths} />
       <p>Action Movies</p>

@@ -1,4 +1,4 @@
-import { SearchResults } from "@/typings";
+import { Movie, SearchResults } from "@/typings";
 
 // Función para realizar la petición a la API
 async function peticion(url: URL, cacheTime?: number) {
@@ -19,7 +19,24 @@ async function peticion(url: URL, cacheTime?: number) {
   const data = (await response.json()) as SearchResults;
   return data;
 }
-
+async function peticionDetalles(url: URL, cacheTime?: number) {
+  url.searchParams.set("include_adult", "false");
+  url.searchParams.set("include_video", "false");
+  url.searchParams.set("sort_by", "popularity.desc");
+  url.searchParams.set("language", "en-US"); // Asegúrate de que 'language' esté bien escrito
+  url.searchParams.set("page", "2");
+  const options: RequestInit = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${process.env.TMB_API_KEY}`,
+    },
+    next: { revalidate: cacheTime || 60 * 60 * 24 },
+  };
+  const response = await fetch(url.toString(), options);
+  const data = (await response.json()) as Movie;
+  return data;
+}
 // Función para obtener películas de acuerdo al género
 export async function getMoviesByGenre(genreId: number) {
   const url = new URL("https://api.themoviedb.org/3/discover/movie");
@@ -40,8 +57,8 @@ export async function getAnimeMovies() {
   // Necesitas el ID del género para anime; por ejemplo, 16 podría ser el ID para anime
   return getMoviesByGenre(16);
 }
-export async function getMovieDetails(id: number) {
+export async function getMovieDetails(id: string) {
   const url = new URL(`https://api.themoviedb.org/3/movie/${id}`);
-  const data = await peticion(url);
+  const data = await peticionDetalles(url);
   return data;
 }
